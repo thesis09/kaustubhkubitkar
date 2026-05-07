@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaustubh Kubitkar — RL & LLM Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --text: #111111;
+    --muted: #777;
+    --accent: #0052cc;
+    --accent-light: #e8f0fe;
+    --border: #e2e2de;
+    --radius: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(247,246,242,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  nav.scrolled { border-color: var(--border); }
+  .nav-logo {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9rem; font-weight: 500;
+    letter-spacing: 0.05em; color: var(--text); text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--muted);
+    font-size: 0.85rem; font-weight: 400;
+    letter-spacing: 0.02em; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 3rem 4rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem; letter-spacing: 0.15em;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.6s 0.1s ease forwards;
+  }
+  .hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: 1.05; letter-spacing: -0.02em;
+    font-weight: 400; color: var(--text);
+    margin-bottom: 0.3rem;
+    opacity: 0; animation: fadeUp 0.6s 0.2s ease forwards;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--muted); font-weight: 300;
+    margin-top: 1.8rem; max-width: 600px; line-height: 1.75;
+    opacity: 0; animation: fadeUp 0.6s 0.35s ease forwards;
+  }
+  .hero-badges {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem;
+    opacity: 0; animation: fadeUp 0.6s 0.45s ease forwards;
+  }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.06em;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--muted); padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.6s 0.5s ease forwards;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.6rem; border-radius: 8px;
+    font-size: 0.875rem; font-weight: 500;
+    font-family: 'IBM Plex Sans', sans-serif;
+    text-decoration: none; transition: all 0.2s;
+    cursor: pointer; border: none;
+  }
+  .btn-primary { background: var(--text); color: #fff; }
+  .btn-primary:hover { background: #333; transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-outline:hover { background: var(--surface); border-color: #bbb; transform: translateY(-1px); }
+  .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .hero-scroll {
+    margin-top: 4rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    color: var(--muted); font-size: 0.78rem;
+    font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.08em;
+    opacity: 0; animation: fadeUp 0.6s 0.7s ease forwards;
+  }
+  .scroll-line { width: 36px; height: 1px; background: var(--muted); }
+
+  /* SECTION SHARED */
+  section { padding: 6rem 3rem; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.18em;
+    color: var(--muted); text-transform: uppercase;
+    margin-bottom: 3rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 400; letter-spacing: -0.02em;
+    line-height: 1.15; margin-bottom: 1rem;
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.2rem; margin-top: 2.5rem;
+  }
+  .skill-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+  .skill-card:hover { border-color: #bbb; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
+  .skill-icon {
+    width: 36px; height: 36px; background: var(--accent-light);
+    border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; margin-bottom: 1rem; font-size: 1.1rem;
+  }
+  .skill-card h3 { font-size: 0.9rem; font-weight: 500; margin-bottom: 0.4rem; }
+  .skill-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.55; }
+
+  /* PROJECTS */
+  .projects-intro {
+    font-size: 1rem; color: var(--muted); font-weight: 300;
+    max-width: 560px; line-height: 1.7; margin-bottom: 0;
+  }
+  .featured-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #fff; background: var(--accent);
+    padding: 0.25rem 0.6rem; border-radius: 4px; margin-left: 0.75rem;
+    vertical-align: middle;
+  }
+
+  /* FEATURED PROJECT — FORGE (wide card) */
+  .forge-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden;
+    margin-top: 2.5rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    display: grid; grid-template-columns: 1fr 1fr;
+  }
+  .forge-card:hover { border-color: #aaa; box-shadow: 0 12px 40px rgba(0,0,0,0.09); }
+  .forge-banner {
+    background: linear-gradient(145deg, #1a0533 0%, #4a1d96 60%, #7c3aed 100%);
+    padding: 3rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 340px;
+    position: relative; overflow: hidden;
+  }
+  .forge-banner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 70% 30%, rgba(124,58,237,0.4) 0%, transparent 65%);
+  }
+  .forge-banner-top { position: relative; z-index: 1; }
+  .forge-icon {
+    width: 52px; height: 52px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; margin-bottom: 1.2rem;
+  }
+  .forge-banner h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2rem; font-weight: 400;
+    color: #fff; line-height: 1.15; letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+  }
+  .forge-banner .subtitle {
+    font-size: 0.82rem; color: rgba(255,255,255,0.55);
+    font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.05em;
+  }
+  .forge-stats {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;
+  }
+  .forge-stat {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px; padding: 0.8rem;
+  }
+  .forge-stat-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.5rem; color: #fff; line-height: 1;
+    margin-bottom: 0.2rem;
+  }
+  .forge-stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.45); letter-spacing: 0.05em; }
+  .forge-body { padding: 3rem; display: flex; flex-direction: column; justify-content: space-between; }
+  .forge-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+
+  /* PROJECTS GRID */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem; margin-top: 1.5rem;
+  }
+  .project-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    display: flex; flex-direction: column;
+  }
+  .project-card:hover { border-color: #aaa; transform: translateY(-3px); box-shadow: 0 10px 36px rgba(0,0,0,0.08); }
+  .project-banner {
+    height: 150px; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .project-banner-inner {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.1em; color: rgba(255,255,255,0.55);
+  }
+  .banner-label {
+    position: relative; z-index: 1;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 6px;
+  }
+  .project-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); background: var(--accent-light);
+    padding: 0.2rem 0.55rem; border-radius: 4px; letter-spacing: 0.03em;
+  }
+  .project-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.3rem; font-weight: 400;
+    letter-spacing: -0.01em; margin-bottom: 0.4rem;
+  }
+  .project-result {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem; color: #15803d;
+    background: #f0fdf4; border: 1px solid #bbf7d0;
+    padding: 0.35rem 0.7rem; border-radius: 5px;
+    margin-bottom: 0.8rem; display: inline-block;
+    letter-spacing: 0.03em;
+  }
+  .project-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.65; flex: 1; margin-bottom: 1.5rem; }
+  .project-links { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .project-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.78rem; font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500; text-decoration: none;
+    padding: 0.45rem 0.9rem; border-radius: 6px;
+    border: 1px solid var(--border); color: var(--text);
+    transition: all 0.18s; letter-spacing: 0.02em;
+  }
+  .project-link:hover { background: var(--text); color: #fff; border-color: var(--text); }
+  .project-link svg { width: 13px; height: 13px; }
+  .project-link.hf { color: #ff6b35; border-color: #fde3d7; background: #fff8f5; }
+  .project-link.hf:hover { background: #ff6b35; color: #fff; border-color: #ff6b35; }
+  .project-link.medium { color: #333; border-color: #ddd; }
+  .project-link.medium:hover { background: #333; color: #fff; border-color: #333; }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: start; margin-top: 2.5rem;
+  }
+  .about-text p {
+    color: #444; line-height: 1.8;
+    font-weight: 300; font-size: 1.05rem; margin-bottom: 1.2rem;
+  }
+  .about-text a { color: var(--accent); text-decoration: none; }
+  .about-text a:hover { text-decoration: underline; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .stat-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.4rem;
+  }
+  .stat-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2.2rem; line-height: 1;
+    letter-spacing: -0.02em; color: var(--text); margin-bottom: 0.3rem;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.02em; }
+
+  /* CONTACT */
+  .contact-wrapper {
+    background: var(--text); border-radius: 20px; padding: 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 3rem; flex-wrap: wrap;
+  }
+  .contact-wrapper .section-title { color: #fff; margin-bottom: 0.5rem; }
+  .contact-tagline { color: rgba(255,255,255,0.5); font-size: 0.95rem; font-weight: 300; }
+  .contact-avail {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #4ade80; margin-top: 0.8rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .contact-avail::before {
+    content: ''; width: 7px; height: 7px; background: #4ade80;
+    border-radius: 50%; animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+  .contact-links { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    text-decoration: none; padding: 0.7rem 1.4rem; border-radius: 8px;
+    font-size: 0.85rem; font-weight: 500; transition: all 0.2s;
+  }
+  .contact-link-light {
+    background: rgba(255,255,255,0.1); color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .contact-link-light:hover { background: rgba(255,255,255,0.2); }
+  .contact-link-white { background: #fff; color: var(--text); }
+  .contact-link-white:hover { background: #eee; }
+
+  footer {
+    text-align: center; padding: 2.5rem 3rem;
+    color: var(--muted); font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.08em;
+    border-top: 1px solid var(--border); margin-top: 2rem;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* GITHUB SVG */
+  .gh { fill: currentColor; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    section, .hero { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .contact-wrapper { padding: 2.5rem; flex-direction: column; }
+    .hero h1 { font-size: 2.8rem; }
+    .forge-card { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">kaustubh.ai</a>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">RL Engineer · LLM Fine-tuning · ML Systems</p>
+  <h1>Building <em>intelligent</em><br>systems from scratch.</h1>
+  <p class="hero-sub">
+    I fine-tune large language models, design reinforcement learning agents, and build
+    end-to-end ML pipelines — from research on H100s to deployment on consumer hardware.
+    Open to RL + LLM engineering roles.
+  </p>
+  <div class="hero-badges">
+    <span class="badge">PyTorch</span>
+    <span class="badge">QLoRA / Fine-tuning</span>
+    <span class="badge">PPO / RL</span>
+    <span class="badge">Transformers</span>
+    <span class="badge">FastAPI</span>
+    <span class="badge">GGUF / llama.cpp</span>
+    <span class="badge">India onsite · Worldwide remote</span>
+  </div>
+  <div class="hero-actions">
+    <a href="#projects" class="btn btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9 6 9-6M3 17l9 6 9-6M3 12l9 6 9-6"/></svg>
+      View My Work
+    </a>
+    <a href="https://github.com/thesis09" target="_blank" class="btn btn-outline">
+      <svg viewBox="0 0 24 24" class="gh"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      GitHub
+    </a>
+    <a href="https://www.linkedin.com/in/kaustubh-kubitkar" target="_blank" class="btn btn-outline">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    scroll to explore
+  </div>
+</div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="reveal">
+    <p class="section-label">What I work with</p>
+    <h2 class="section-title">Skills &amp; Expertise</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-icon">🤖</div>
+      <h3>LLM Fine-tuning</h3>
+      <p>QLoRA, LoRA, HuggingFace PEFT/TRL, GGUF export, llama.cpp, custom eval harnesses. Ran 27B params on RTX 3060.</p>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🧠</div>
+      <h3>Reinforcement Learning</h3>
+      <p>PPO from scratch, GAE, Transformer-XL memory agents, ViT-based observation encoders, multi-GPU training.</p>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">👁</div>
+      <h3>Deep Learning</h3>
+      <p>PyTorch, ViT-B/16, DINOv2, CNNs, Transformer architectures, H100 training, cross-GPU model compression.</p>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">📊</div>
+      <h3>Quantitative ML</h3>
+      <p>XGBoost, time-series CV, feature engineering, causal indicators, VWAP/TWAP, walk-forward validation.</p>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🚀</div>
+      <h3>ML Engineering</h3>
+      <p>FastAPI inference servers, Streamlit UIs, Docker, CUDA optimization, deterministic reproducibility across GPUs.</p>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">⚗️</div>
+      <h3>Research to Production</h3>
+      <p>End-to-end pipelines: dataset curation → training → evaluation → export → deployment. All on consumer hardware.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal">
+    <p class="section-label">What I've built</p>
+    <h2 class="section-title">Projects</h2>
+    <p class="projects-intro">
+      Every project is end-to-end — from dataset curation and training to evaluation and deployment.
+      All production runs on consumer hardware (RTX 3060 12 GB).
+    </p>
+  </div>
+
+  <!-- FORGE — FEATURED -->
+  <div class="forge-card reveal">
+    <div class="forge-banner">
+      <div class="forge-banner-top">
+        <div class="forge-icon">⚡</div>
+        <h2>Forge</h2>
+        <p class="subtitle">Local Coding Assistant · Gemma 3 27B QLoRA</p>
+      </div>
+      <div class="forge-stats">
+        <div class="forge-stat">
+          <div class="forge-stat-num">98.78%</div>
+          <div class="forge-stat-label">HumanEval pass@1</div>
+        </div>
+        <div class="forge-stat">
+          <div class="forge-stat-num">27B</div>
+          <div class="forge-stat-label">Params on RTX 3060</div>
+        </div>
+        <div class="forge-stat">
+          <div class="forge-stat-num">71%</div>
+          <div class="forge-stat-label">MBPP pass@1</div>
+        </div>
+        <div class="forge-stat">
+          <div class="forge-stat-num">Q4_K_M</div>
+          <div class="forge-stat-label">GGUF · ~16 GB</div>
+        </div>
+      </div>
+    </div>
+    <div class="forge-body">
+      <div>
+        <div class="forge-tags">
+          <span class="tag">QLoRA</span><span class="tag">Gemma 3</span><span class="tag">GGUF</span>
+          <span class="tag">FastAPI</span><span class="tag">Streamlit</span><span class="tag">llama.cpp</span>
+          <span class="tag">HumanEval</span>
+        </div>
+        <p style="font-size:0.9rem; color:#444; line-height:1.7; margin-bottom:1.2rem;">
+          A full end-to-end LLM fine-tuning pipeline: 33K samples curated from three sources →
+          QLoRA training on H100 (~3h 48m) → GGUF export → FastAPI OpenAI-compatible server →
+          Streamlit UI → custom eval harness. Runs a 27B model locally on a single RTX 3060 12 GB.
+        </p>
+        <p style="font-size:0.84rem; color:var(--muted); line-height:1.65; margin-bottom:1.5rem;">
+          The HumanEval gain of +15pp over the Gemma 3 27B-IT base is real. MBPP (71%) is the
+          honest generalization number — confirms no catastrophic forgetting. Supports Python,
+          JavaScript, Java, C++, C, and SQL.
+        </p>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/thesis09/Forge-Local-Coding-Assistant" target="_blank" class="project-link">
+          <svg viewBox="0 0 24 24" class="gh"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          GitHub
+        </a>
+        <a href="https://huggingface.co/KK9922/Forge-Gemma-3-27B-GGUF" target="_blank" class="project-link hf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          HuggingFace
+        </a>
+        <a href="https://medium.com/@kaustubh09k/i-fine-tuned-a-27-billion-parameter-model-as-a-fresher-heres-everything-that-broke-1db882563e4a" target="_blank" class="project-link medium">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Engineering Write-up
+        </a>
+        <a href="https://youtu.be/3acwPjRmo74" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            Demo
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- REMAINING PROJECTS GRID -->
+  <div class="projects-grid">
+
+    <!-- LUNAR LANDER -->
+    <div class="project-card reveal">
+      <div class="project-banner">
+        <div class="project-banner-inner" style="background: linear-gradient(135deg, #0c1445 0%, #1e40af 100%);">
+          <span class="banner-label">RL · Transformer-XL · PPO</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="tag">PyTorch</span><span class="tag">PPO</span>
+          <span class="tag">Transformer-XL</span><span class="tag">Gymnasium</span>
+        </div>
+        <h3 class="project-title">LunarLander-v3 Agent</h3>
+        <div class="project-result">+280 reward · 35k steps · 3× sample efficiency</div>
+        <p class="project-desc">
+          A production-grade recurrent RL agent solving LunarLander-v3 using Transformer-XL
+          memory inside a custom PPO loop. Converges ~3× faster than vanilla PPO (~35k vs ~100k steps),
+          with a distinct 3-phase learning curve driven by the memory context window filling.
+          Architecture is modular — swap Identity encoder for DinoV2/ViT to handle pixel envs.
+        </p>
+        <div class="project-links">
+          <a href="https://github.com/thesis09/Lunar-Lander" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" class="gh"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtu.be/IQEepdQQAIo" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            Demo
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARTPOLE -->
+    <div class="project-card reveal">
+      <div class="project-banner">
+        <div class="project-banner-inner" style="background: linear-gradient(135deg, #064e3b 0%, #059669 100%);">
+          <span class="banner-label">ViT · PPO · H100 → RTX 3060</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="tag">PyTorch</span><span class="tag">ViT-B/16</span>
+          <span class="tag">PPO</span><span class="tag">Model Compression</span>
+        </div>
+        <h3 class="project-title">CartPole ViT+PPO</h3>
+        <div class="project-result">480+/500 score · 96% perf retained · ~17× compute reduction</div>
+        <p class="project-desc">
+          Trains a Vision Transformer (ViT-B/16) + Transformer-XL + PPO agent on raw pixel
+          frames using an H100, then compresses and deploys to a consumer RTX 3060 — retaining 96%
+          of peak performance across a ~17× compute reduction. A direct study in hardware-aware
+          ML optimization: train big, deploy lean.
+        </p>
+        <div class="project-links">
+          <a href="https://github.com/thesis09/Cartpole-" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" class="gh"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtu.be/k2sKk2SqtFI" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+            Demo
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRYPTO QUANT -->
+    <div class="project-card reveal">
+      <div class="project-banner">
+        <div class="project-banner-inner" style="background: linear-gradient(135deg, #451a03 0%, #c2410c 100%);">
+          <span class="banner-label">XGBoost · Quant · Time-series</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="tag">XGBoost</span><span class="tag">Pandas</span>
+          <span class="tag">TimeSeriesSplit</span><span class="tag">Binance API</span>
+        </div>
+        <h3 class="project-title">Crypto Predictive Pipeline</h3>
+        <div class="project-result">RMSE 3.01 · 300-iter RandomizedSearchCV · 5-fold walk-forward CV</div>
+        <p class="project-desc">
+          End-to-end quant pipeline: fetches BTCUSDT 15m OHLCV from Binance (2020–2025),
+          engineers 9 causal features (VWAP, TWAP, RSI, EMA, rolling proximity), then trains
+          dual XGBoost regressors to forecast % deviation from the next N-bar High and Low.
+          Strict TimeSeriesSplit prevents any look-ahead bias.
+        </p>
+        <div class="project-links">
+          <a href="https://github.com/thesis09/Quantitative-Crypto-Research-Predictive-Pipeline" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" class="gh"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRONE -->
+    <div class="project-card reveal">
+      <div class="project-banner">
+        <div class="project-banner-inner" style="background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);">
+          <span class="banner-label">CV · Drone · Swarm Navigation</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="tag">Computer Vision</span><span class="tag">Deep Learning</span>
+          <span class="tag">Autonomous Systems</span><span class="tag">Swarm Nav</span>
+        </div>
+        <h3 class="project-title">Autonomous Drone — Motion Capture & Person Detection</h3>
+        <div class="project-result">95% detection accuracy · 40% faster acquisition · 100+ live flights</div>
+        <p class="project-desc">
+          Final year project: spearheaded CV and flight-control architecture for an autonomous drone
+          with real-time person detection via motion capture. Bridged deep learning vision models with
+          onboard electronics, and engineered swarm search algorithms that cut target acquisition time
+          by 40% across 100+ live test flights. Co-authored and published as a peer-reviewed paper.
+        </p>
+        <div class="project-links">
+          <a href="https://jisem-journal.com/index.php/journal/article/view/4605" target="_blank" class="project-link" style="color:#7c3aed; background:#f5f3ff; border-color:#ddd6fe;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Published Paper
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- AIR QUALITY -->
+    <div class="project-card reveal">
+      <div class="project-banner">
+        <div class="project-banner-inner" style="background: linear-gradient(135deg, #052e16 0%, #16a34a 100%);">
+          <span class="banner-label">ML · Environment · Prediction</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">Scikit-learn</span>
+          <span class="tag">Regression</span><span class="tag">EDA</span>
+        </div>
+        <h3 class="project-title">Air Quality &amp; CO₂ Prediction</h3>
+        <p class="project-desc">
+          ML pipeline predicting air quality indices and CO₂ emission levels from environmental
+          factors — temperature, humidity, wind speed, industrial emissions, and traffic data.
+          Designed as a decision-support tool for policymakers and environmental agencies.
+        </p>
+        <div class="project-links">
+          <a href="ADD_GITHUB_LINK_HERE" target="_blank" class="project-link">
+            <svg viewBox="0 0 24 24" class="gh"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <p class="section-label">Who I am</p>
+    <h2 class="section-title">About Me</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>
+        I'm <strong>Kaustubh Kubitkar</strong> —  An Electronics Graduate and an AI/ ML engineer focused on reinforcement learning,
+        large language model systems and quant. My work spans the full stack: from writing custom PPO
+        training loops and fine-tuning 27B parameter models, to building the inference servers
+        and UIs that expose them.
+      </p>
+      <p>
+        I care deeply about running things on real hardware under real constraints. Every project
+        here runs on a consumer RTX 3060 — because a model that only works on H100 infrastructure
+        has limited practical value.
+      </p>
+      <p>
+        I'm open to <strong>RL + LLM engineering roles + Quant roles</strong> — India onsite or worldwide remote.
+        Reach me at <a href="mailto:kaustubhkubitkar@gmail.com">kaustubhkubitkar@gmail.com</a>.
+      </p>
+    </div>
+    <div class="about-stats reveal">
+      <div class="stat-box">
+        <div class="stat-num">27B</div>
+        <div class="stat-label">Largest model fine-tuned</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">98.8%</div>
+        <div class="stat-label">HumanEval pass@1 (Forge)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">17×</div>
+        <div class="stat-label">Compute reduction (CartPole)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">1×</div>
+        <div class="stat-label">Peer-reviewed paper published</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrapper reveal">
+    <div>
+      <h2 class="section-title">Let's work together.</h2>
+      <p class="contact-tagline">Open to RL + LLM engineering roles + Quant roles — India onsite · worldwide remote.</p>
+      <p class="contact-avail">Available for opportunities</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:kaustubhkubitkar@gmail.com" class="contact-link contact-link-white">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+        Email Me
+      </a>
+      <a href="https://github.com/thesis09" target="_blank" class="contact-link contact-link-light">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/kaustubh-kubitkar" target="_blank" class="contact-link contact-link-light">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Kaustubh Kubitkar · RL & LLM Engineer · kaustubhkubitkar@gmail.com</p>
+</footer>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 90);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
